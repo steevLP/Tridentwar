@@ -1,0 +1,6 @@
+name: TridentWar
+main: de.steev.tridentwar.main
+version: 0.1
+api-version: 1.13
+commands:
+  tw:
