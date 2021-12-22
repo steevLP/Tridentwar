@@ -21,8 +21,8 @@ public class ProjectileLaunchListener implements Listener {
 
     @EventHandler
     public void OnProjectileLaunch(ProjectileLaunchEvent event){
-        this.tridentResetTask = new TridentResetTask(this.gameManager, (Player)event.getEntity().getShooter());
-        this.tridentResetTask.runTaskLater(plugin, 300);
+        this.tridentResetTask = new TridentResetTask(this.gameManager, (Player)event.getEntity().getShooter(), event.getEntity());
+        this.tridentResetTask.runTaskLater(plugin, 1000);
         gameManager.getTridentManager().setTasks((Player)event.getEntity().getShooter(), this.tridentResetTask);
     }
 }

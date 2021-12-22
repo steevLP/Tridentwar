@@ -1,6 +1,7 @@
 package de.steev.Tridentwar;
 
 import de.steev.Tridentwar.commands.TridentwarCommand;
+import de.steev.Tridentwar.listeners.PlayerDeathListener;
 import de.steev.Tridentwar.listeners.ProjectileHitListener;
 import de.steev.Tridentwar.listeners.ProjectileLaunchListener;
 import de.steev.Tridentwar.manager.GameManager;
@@ -15,6 +16,7 @@ public class Tridentwar extends JavaPlugin {
         this.gameManager = new GameManager(this);
         getServer().getPluginManager().registerEvents(new ProjectileLaunchListener(this.gameManager, this), this);
         getServer().getPluginManager().registerEvents(new ProjectileHitListener(this.gameManager), this);
+        getServer().getPluginManager().registerEvents(new PlayerDeathListener(this.gameManager), this);
         getCommand("tw").setExecutor(new TridentwarCommand(gameManager));
     }
 

@@ -25,14 +25,24 @@ public class GameManager {
         switch (gameState){
             case ACTIVE:
                 Bukkit.broadcastMessage("Active!");
+                this.playerManager.setAlive(Bukkit.getOnlinePlayers().size());
                 this.playerManager.giveKits();
                 break;
             case STARTING:
+                if(Bukkit.getOnlinePlayers().size() < 2) return; // TODO: Message about minimal player count not beeing reached
                 Bukkit.broadcastMessage("Starting!");
                 this.gameStartCountdownTask = new GameStartCountdownTask(this);
                 this.gameStartCountdownTask.runTaskTimer(plugin, 0 , 20);
                 // teleport players
-                // clear inventories
+                break;
+            case WON:
+                Bukkit.broadcastMessage("WON");
+                break;
+            case STOPPING:
+                Bukkit.broadcastMessage("Stopping Game");
+                break;
+            case ABORTING:
+                Bukkit.broadcastMessage("No Player Alive game aborts");
                 break;
         }
     }
