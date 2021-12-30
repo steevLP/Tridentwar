@@ -42,7 +42,7 @@ public class GameManager {
                 Bukkit.broadcastMessage("Stopping Game");
                 break;
             case ABORTING:
-                Bukkit.broadcastMessage("No Player Alive game aborts");
+                Bukkit.broadcastMessage("No Player Alive game aborts"); 
                 break;
         }
     }
