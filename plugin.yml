@@ -5,4 +5,3 @@ api-version: 1.13
 commands:
   tw:
     description: "controlls plugin"
-    usage: /jobs <list, info, stats, join, leave>

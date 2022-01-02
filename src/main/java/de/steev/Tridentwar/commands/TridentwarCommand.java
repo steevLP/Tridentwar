@@ -15,12 +15,19 @@ public class TridentwarCommand implements CommandExecutor {
     }
 
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
-        if (args[0] == null) return false;
 
-        switch (args[0].toLowerCase()){
-            case "start":
-                gameManager.setGameState(GameState.STARTING);
-                break;
+        if(args.length >= 1) {
+            switch (args[0].toLowerCase()){
+                default:
+                    commandSender.sendMessage("use args: start");
+                    break;
+                case "start":
+                    System.out.println(args[0]);
+                    gameManager.setGameState(GameState.STARTING);
+                    break;
+            }
+        } else {
+            commandSender.sendMessage("Empty Commands are not allowed!");
         }
         return false;
     }

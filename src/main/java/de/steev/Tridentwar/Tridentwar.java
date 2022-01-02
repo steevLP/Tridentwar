@@ -17,7 +17,7 @@ public class Tridentwar extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ProjectileLaunchListener(this.gameManager, this), this);
         getServer().getPluginManager().registerEvents(new ProjectileHitListener(this.gameManager), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathListener(this.gameManager), this);
-        getCommand("tw").setExecutor(new TridentwarCommand(gameManager));
+        getCommand("tw").setExecutor(new TridentwarCommand(this.gameManager));
     }
 
     @Override

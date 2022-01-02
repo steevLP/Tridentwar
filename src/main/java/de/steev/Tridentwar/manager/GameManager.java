@@ -29,7 +29,11 @@ public class GameManager {
                 this.playerManager.giveKits();
                 break;
             case STARTING:
-                if(Bukkit.getOnlinePlayers().size() < 2) return; // TODO: Message about minimal player count not beeing reached
+                if(Bukkit.getOnlinePlayers().size() < 2) {
+                    // Message about minimal player count not beeing reached
+                    Bukkit.broadcastMessage("Game cannot be started with a single player");
+                    return;
+                }
                 Bukkit.broadcastMessage("Starting!");
                 this.gameStartCountdownTask = new GameStartCountdownTask(this);
                 this.gameStartCountdownTask.runTaskTimer(plugin, 0 , 20);
