@@ -17,11 +17,13 @@ public class TridentResetTask extends BukkitRunnable {
         this.gameManager = gameManager;
         this.thrower = thrower;
         this.projektile = projektile;
+        System.out.println("Trident Reset task started");
     }
 
     @Override
     public void run() {
         projektile.remove();
         thrower.getInventory().addItem(new ItemStack(Material.TRIDENT));
+        System.out.println("Trident Reset task executed");
     }
 }
