@@ -30,5 +30,5 @@ public class SoundManager {
      * @param volume How loud the Sound will be
      * @param pitch How pitched the sound is
      */
-    public void broadCastSound (Sound sound, float volume, float pitch) { Bukkit.getOnlinePlayers().forEach(player -> playSound(player,sound, volume, pitch)); }
+    public void broadCastSound (Sound sound, float volume, float pitch) { for(Player p : Bukkit.getOnlinePlayers()) playSound(p,sound, volume, pitch); }
 }

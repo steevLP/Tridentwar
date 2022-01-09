@@ -1,0 +1,25 @@
+error:
+    invalid-permission: "&cYou are not permitted to use that command!"
+    location-set-error: "&cthe location could not be set!"
+    not-enough-players: "&cNot enough players &n%min% &cplayers needed to start!"
+    location-not-found: "&c%location% was not found"
+    is-already-waiting: "&can Error occured the lobby already is waiting"
+    no-game-running: "&cYou cannot spectate on a not running game"
+dev:
+    location-set: "&a%location% has been set!"
+game:
+    starting: "Game is starting"
+    countdown: "starting in: "
+titles:
+    death:
+        top: "&cYou Died!"
+        bottom: "&6You have lost this Round!"
+    won:
+        top: "&aGame Ends!"
+        bottom: "&6%winner% has won the game"
+    stopping:
+        top: "&eGame Stopps!"
+        bottom: "&6&6You will be moved back to &6&n%default%"
+    aborted:
+        top: "&c&lGame Aborting!"
+        bottom: "&6You will be moved back to &n%default%"

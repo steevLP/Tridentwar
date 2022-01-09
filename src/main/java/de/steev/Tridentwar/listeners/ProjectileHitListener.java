@@ -5,6 +5,7 @@ import de.steev.Tridentwar.manager.GameState;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Trident;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -20,15 +21,20 @@ public class ProjectileHitListener implements Listener {
     @EventHandler
     public void onTridentHit(ProjectileHitEvent event){
         if (this.gameManager.gameState == GameState.ACTIVE) {
-            if(this.gameManager.getTridentManager().getTask((Player)event.getEntity().getShooter()) != null) {
-                this.gameManager.getTridentManager().getTask((Player) event.getEntity().getShooter()).cancel();
-                this.gameManager.getTridentManager().removeTridentTast((Player) event.getEntity().getShooter());
-            }
 
-            if(event.getHitEntity() instanceof Player) ((Player) event.getEntity().getShooter()).playSound(((Player) event.getEntity().getShooter()).getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1f, 0.5f);
+            // Removes trident task when not needed
+            this.gameManager.getTridentManager().removeTridentTask((Player) event.getEntity().getShooter());
 
+            // Resets tridents to player
             event.getEntity().remove();
             ((Player) event.getEntity().getShooter()).getInventory().addItem(new ItemStack(Material.TRIDENT));
+
+            // tracks if the hit target was a player
+            if (event.getHitEntity() instanceof Player) {
+                if(this.gameManager.getTridentManager().getTask((Player)event.getEntity().getShooter()) != null) {
+                    ((Player) ((Trident)event.getEntity()).getShooter()).playSound(((Player) ((Trident)event.getEntity()).getShooter()).getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 10, 1);
+                }
+            }
         }
     }
 }

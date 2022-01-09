@@ -4,6 +4,7 @@ import de.steev.Tridentwar.tasks.TridentResetTask;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class TridentManager {
     /** collects all TridentResetTask bound to a player */
@@ -30,9 +31,21 @@ public class TridentManager {
      */
     public TridentResetTask getTask (Player thrower) { return tasks.get(thrower); }
 
+    /** clears triendt tasks */
+    public void clearTasks() {
+        for(Map.Entry<Player, TridentResetTask> t : tasks.entrySet()) {
+            TridentResetTask task = t.getValue();
+            task.cancel();
+        }
+        System.out.println("DEBUG: Trident tasks have been cleared");
+    }
+
     /**
      * Removes a TridentResetTask of a given player
      * @param thrower the thrower of which the TridentResetTask should be removed from
      */
-    public void removeTridentTast(Player thrower) { tasks.remove(thrower); }
+    public void removeTridentTask(Player thrower) {
+        getTask(thrower).cancel();
+        tasks.remove(thrower);
+    }
 }

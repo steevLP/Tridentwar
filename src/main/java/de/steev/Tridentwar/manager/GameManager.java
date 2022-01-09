@@ -1,12 +1,12 @@
 package de.steev.Tridentwar.manager;
 
+import de.steev.Tridentwar.Handlers.FileHandler;
 import de.steev.Tridentwar.Tridentwar;
 import de.steev.Tridentwar.tasks.GameStartCountdownTask;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.configuration.file.FileConfiguration;
+import de.steev.Tridentwar.tasks.LobbyWaitingTask;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class GameManager {
     private final Tridentwar plugin;
@@ -15,7 +15,10 @@ public class GameManager {
     public GameState gameState = GameState.LOBBY;
     private PlayerManager playerManager;
     private MessageManager messageManager;
-
+    private FileHandler fileHandler;
+    private LobbyWaitingTask lobbyWaitingTask;
+    private boolean isWaiting = false;
+    private Effect record;
 
     /**
      * Handles the entire Game
@@ -26,6 +29,8 @@ public class GameManager {
         this.tridentManager = new TridentManager(this);
         this.playerManager = new PlayerManager(this);
         this.messageManager = new MessageManager(this);
+        this.fileHandler = new FileHandler(this);
+        this.lobbyWaitingTask = null;
     }
 
     /**
@@ -38,53 +43,136 @@ public class GameManager {
 
         switch (gameState){
             case ACTIVE:
-                Bukkit.broadcastMessage("Active!");
+                isWaiting = false;
+                this.playerManager.setGameModes(GameMode.SURVIVAL);
+                this.playerManager.setPlayersHealth(20F);
                 this.playerManager.setAlive(Bukkit.getOnlinePlayers().size());
                 this.playerManager.giveKits();
                 break;
+
             case STARTING:
                 if(Bukkit.getOnlinePlayers().size() < this.plugin.config.getInt("minplayers")) {
                     // Message about minimal player count not beeing reached
-                    Bukkit.broadcastMessage("Game cannot be started with a single player");
+                    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',this.fileHandler.replaceVars(this.plugin.languageDataConfig.getString("error.not-enough-players"), null, null)));
+                    this.setGameState(GameState.LOBBY);
                     return;
                 }
-                Bukkit.broadcastMessage("Starting!");
+                this.lobbyWaitingTask = null;
                 this.gameStartCountdownTask = new GameStartCountdownTask(this);
                 this.gameStartCountdownTask.runTaskTimer(plugin, 0 , 20);
-                // teleport players
-                playerManager.teleportPlayers(this.plugin.config.getLocation("arena"));
+                if(this.plugin.config.getLocation("arena") == null) {
+                    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',this.fileHandler.replaceVars(this.plugin.languageDataConfig.getString("error.location-not-found"), null, null)));
+                } else {
+                    playerManager.teleportPlayers(this.plugin.config.getLocation("arena"));
+                }
                 break;
+
+            case WAITING:
+                if(!isWaiting) {
+                    lobbyWaitingTask = new LobbyWaitingTask(this);
+                    lobbyWaitingTask.runTaskTimer(plugin, 0, 20);
+                    isWaiting = true;
+                } else {
+                    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',plugin.languageDataConfig.getString("error.is-already-waiting")));
+                }
+                break;
+
             case LOBBY:
-                playerManager.teleportPlayers(this.plugin.config.getLocation("lobby"));
+                playerManager.setGameModes(GameMode.SURVIVAL);
+                if(this.plugin.config.getLocation("arena") == null) {
+                    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',this.fileHandler.replaceVars(this.plugin.languageDataConfig.getString("error.location-not-found"), null, null)));
+                } else {
+                    playerManager.teleportPlayers(this.plugin.config.getLocation("lobby"));
+                }
                 break;
+
             case WON:
-                Bukkit.broadcastMessage("Game has been won");
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if(p.getGameMode() == GameMode.SURVIVAL) {
-                        this.messageManager.broadCastTitle("Game ends", p.getDisplayName() + " has won the game");
+                        this.messageManager.broadCastTitle(ChatColor.translateAlternateColorCodes('&',this.plugin.languageDataConfig.getString("titles.won.top")),
+                                ChatColor.translateAlternateColorCodes('&',this.fileHandler.replaceVars(this.plugin.languageDataConfig.getString("titles.won.bottom"), p, null)));
                     }
                 }
-                playerManager.teleportPlayers(this.plugin.config.getLocation("lobby"));
-                setGameState(GameState.STOPPING);
+                tridentManager.clearTasks();
+                if(this.plugin.config.getLocation("lobby") == null) {
+                    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',this.fileHandler.replaceVars(this.plugin.languageDataConfig.getString("error.location-not-found"), null, null)));
+                } else {
+                    playerManager.teleportPlayers(this.plugin.config.getLocation("lobby"));
+                }
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        setGameState(GameState.STOPPING);
+                    }
+                }.runTaskLater(plugin, 120);
                 break;
+
             case STOPPING:
-                this.messageManager.broadCastTitle("Round stops", "You will be moved back to hub");
+                if(isWaiting) isWaiting = false;
+                this.messageManager.broadCastTitle(ChatColor.translateAlternateColorCodes('&',this.plugin.languageDataConfig.getString("titles.stopping.top")),
+                        ChatColor.translateAlternateColorCodes('&', this.fileHandler.replaceVars(this.plugin.languageDataConfig.getString("titles.stopping.bottom"), null, "Hub")));
                 this.playerManager.removeKits();
-                // move players back to hub
-                Bukkit.broadcastMessage("Stopping Game");
-                setGameState(GameState.LOBBY);
+
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        // Move players to Hub
+                        Bukkit.getOnlinePlayers().forEach(player -> playerManager.moveFromServer(plugin.config.getString("lobby-server"), player));
+                    }
+                }.runTaskLater(plugin, 100);
+
+                if (plugin.config.getBoolean("autorestart")) {
+                    Bukkit.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "restart");
+                }
+
+                this.setGameState(GameState.LOBBY);
                 break;
+
             case ABORTING:
-                this.messageManager.broadCastTitle("Round aborting", "You will be moved back to hub");
+                if(isWaiting) isWaiting = false;
+                this.messageManager.broadCastTitle(ChatColor.translateAlternateColorCodes('&',this.plugin.languageDataConfig.getString("titles.aborted.top")),
+                        ChatColor.translateAlternateColorCodes('&',this.fileHandler.replaceVars(this.plugin.languageDataConfig.getString("titles.aborted.bottom"), null, "Hub")));
                 this.playerManager.removeKits();
-                // move players back to hub
-                Bukkit.broadcastMessage("No Player Alive game aborts");
-                setGameState(GameState.LOBBY);
+                tridentManager.clearTasks();
+
+                // Move players to Hub
+                Bukkit.getOnlinePlayers().forEach(player -> playerManager.moveFromServer(this.plugin.config.getString("lobby-server"), player));
+
+                if (plugin.config.getBoolean("autorestart")) {
+                    Bukkit.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "restart");
+                }
+
+                this.setGameState(GameState.LOBBY);
                 break;
+
         }
     }
 
     public void cleanup(){}
+
+    /**
+     * Returns the current lobby wayiting task
+     * @return LobbywaitingTask instance
+     */
+    public LobbyWaitingTask getLobbyWaitingTask() { return lobbyWaitingTask; }
+
+    /**
+     * gives back the current messageManager instance
+     * @return the messageManager
+     */
+    public MessageManager getMessageManager() { return messageManager; }
+
+    /**
+     * sets the active lobbywaiting task
+     * @param lobbyWaitingTask the current task for waiting in the lobby
+     */
+    public void setLobbyWaitingTask(LobbyWaitingTask lobbyWaitingTask) { this.lobbyWaitingTask = lobbyWaitingTask; }
+
+    /**
+     * returns filehandler of running plugin instance
+     * @return the filehandler instance
+     */
+    public FileHandler getFileHandler() {  return fileHandler; }
 
     /**
      * local trident manager
@@ -116,7 +204,6 @@ public class GameManager {
      * @param loc the location to set
      */
     public void setLocation(String path, Location loc) {
-        System.out.println("Location: " + loc);
         plugin.config.set(path, loc);
         plugin.saveConfig();
     }

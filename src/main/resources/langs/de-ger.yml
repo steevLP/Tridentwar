@@ -1,0 +1,25 @@
+error:
+  invalid-permission: "&cDir fehlen die nötigen Rechte um das zutun!"
+  location-set-error: "&cDer Ort konnte nicht eingestellt werden!"
+  not-enough-players: "&cEs müssen mindestens &n%min% &cSpieler am Spiel teilnehmen!"
+  location-not-found: "&c%location% Konnte nicht geladen werden"
+  is-already-waiting: "&cEin Fehler ist aufgetreten! Die Lobby wartet bereits auf Spieler!"
+  no-game-running: "&cDu kannst keiner inaktiven Runde zuschauen"
+dev:
+  location-set: "&a%location% wurde gesetzt"
+game:
+  starting: "Spiel startet!"
+  countdown: "Spiel beginnt in: "
+titles:
+  won:
+    top: "&aSpiel Ende!"
+    bottom: "&6%winner% hat das Spiel gewonnen!"
+  death:
+    top: "&cDu bist Tot!"
+    bottom: "&6Diese Runde, hast du verloren."
+  stopping:
+    top: "&eSpiel angehalten!"
+    bottom: "&6&6Du wirst auf den &6&n%default% Server verschoben!"
+  aborted:
+    top: "&c&lSpiel Abgebrochen!"
+    bottom: "&6Du wirst zurück auf den &n%default% Server verschoben!"

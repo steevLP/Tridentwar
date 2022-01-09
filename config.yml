@@ -1,7 +1,25 @@
 # general
 prefix: null
 minplayers: 2
+# The language selected here can only be changed by reloading the plugin
+# the language must equal the language file in ../lang
+# by default avaiable are: de-ger, en-us
+language: "en-us"
+autorestart: false
+lobby-auto-queue: true
+force-on-spawn: true
+lobby-server: "lobby"
 
 # spawn points
 lobby: null
 arena: null
+
+# Permissions
+admin:
+  all: "tw.admin"
+  setlocation:
+    all: "tw.admin.setlocation"
+    lobby: "tw.admin.setlocation.lobby"
+    arena: "tw.admin.setlocation.arena"
+  start: "tw.admin.start"
+  stop: "tw.admin.stop"

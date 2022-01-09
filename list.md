@@ -1,0 +1,30 @@
+- [X] Getting the Plugin to start
+- [X] Player Amount detection works
+- [X] Getting the Game to start
+- [X] Countdown works
+- [X] All players get a trident assigned
+- [X] Trident gets properly reset to Thrower (when not dead)
+    - [X] Error occurs when trident hits ground
+    - [X] does not detect if player somehow remains with tridents
+- [X] Playerdeath Detection works
+- [X] Alive Counter works
+- [X] Game winer routine works
+- [X] config gets created
+- [X] config gets loaded
+- [X] minimal players get loaded from config
+- [X] Writing Spawnpoints into the config works
+- [X] Reading Locations from config works
+    - [X] Players will be teleported to the location wanted
+- [X] Player items do not drop on death and get removed
+- [X] Sounds get played when they are supposed to
+- [ ] Players that join while game is active will be set to spectator
+- [ ] Players that leave the round will be removed from tracking
+- [X] Fix that players lose their tridents when dying but not through trident damage
+- [ ] Permissions are loaded from config
+- [ ] Permission detection works
+- [X] Language files are generated when not present
+- [X] Language will be read from config
+    - [X] Loads correct language file based from configuration
+    - [X] Variables get used properly
+- [X] Messages get used properly
+  - [ ] All Messages are implemented
