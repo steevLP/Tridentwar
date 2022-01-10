@@ -16,10 +16,7 @@ public class JoinListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){
-        if(this.gameManager.getPlugin().config.getBoolean("force-on-spawn")) {
-            this.gameManager.getPlayerManager().setGameMode(event.getPlayer(), GameMode.SURVIVAL);
-            this.gameManager.getPlayerManager().setPlayerHealth(event.getPlayer(), 20);
-        }
+        this.gameManager.getScoreBoardManager().createScoreBoard(event.getPlayer(), 0, 0);
         if(this.gameManager.gameState == GameState.ACTIVE) {
             this.gameManager.getPlayerManager().setGameMode(event.getPlayer(), GameMode.SPECTATOR);
             this.gameManager.getPlayerManager().teleportPlayer(event.getPlayer(), this.gameManager.getPlugin().config.getLocation("arena"));
@@ -28,8 +25,15 @@ public class JoinListener implements Listener {
             if(this.gameManager.getPlugin().config.getBoolean("force-on-spawn")) {
                 this.gameManager.getPlayerManager().setGameMode(event.getPlayer(), GameMode.SURVIVAL);
                 this.gameManager.getPlayerManager().setPlayerHealth(event.getPlayer(), 20);
+                this.gameManager.getPlayerManager().teleportPlayer(event.getPlayer(), this.gameManager.getPlugin().config.getLocation("lobby"));
             }
             this.gameManager.setGameState(GameState.WAITING);
+        } else if (this.gameManager.gameState == GameState.WAITING) {
+            if(this.gameManager.getPlugin().config.getBoolean("force-on-spawn")) {
+                this.gameManager.getPlayerManager().setGameMode(event.getPlayer(), GameMode.SURVIVAL);
+                this.gameManager.getPlayerManager().setPlayerHealth(event.getPlayer(), 20);
+                this.gameManager.getPlayerManager().teleportPlayer(event.getPlayer(), this.gameManager.getPlugin().config.getLocation("lobby"));
+            }
         }
     }
 }

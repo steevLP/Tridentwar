@@ -8,17 +8,20 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.File;
+
 public class GameManager {
     private final Tridentwar plugin;
     private TridentManager tridentManager;
     private GameStartCountdownTask gameStartCountdownTask;
-    public GameState gameState = GameState.LOBBY;
     private PlayerManager playerManager;
     private MessageManager messageManager;
     private FileHandler fileHandler;
     private LobbyWaitingTask lobbyWaitingTask;
     private boolean isWaiting = false;
     private Effect record;
+    private ScoreBoardManager scoreBoardManager;
+    public GameState gameState = GameState.LOBBY;
 
     /**
      * Handles the entire Game
@@ -30,6 +33,7 @@ public class GameManager {
         this.playerManager = new PlayerManager(this);
         this.messageManager = new MessageManager(this);
         this.fileHandler = new FileHandler(this);
+        this.scoreBoardManager = new ScoreBoardManager(this);
         this.lobbyWaitingTask = null;
     }
 
@@ -48,6 +52,10 @@ public class GameManager {
                 this.playerManager.setPlayersHealth(20F);
                 this.playerManager.setAlive(Bukkit.getOnlinePlayers().size());
                 this.playerManager.giveKits();
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    this.playerManager.setKills(p, 0);
+                    this.scoreBoardManager.updateScoreBoard(p, this.getPlayerManager().getAlive(), this.playerManager.getKills(p));
+                }
                 break;
 
             case STARTING:
@@ -118,12 +126,20 @@ public class GameManager {
                     public void run() {
                         // Move players to Hub
                         Bukkit.getOnlinePlayers().forEach(player -> playerManager.moveFromServer(plugin.config.getString("lobby-server"), player));
+
+                        if (plugin.config.getBoolean("autorestart")) {
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    Bukkit.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "restart");
+                                }
+                            }.runTaskLater(plugin, 120);
+                        }
                     }
                 }.runTaskLater(plugin, 100);
 
-                if (plugin.config.getBoolean("autorestart")) {
-                    Bukkit.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "restart");
-                }
+
+                Bukkit.getOnlinePlayers().forEach(player -> this.scoreBoardManager.removeScoreBoard(player));
 
                 this.setGameState(GameState.LOBBY);
                 break;
@@ -139,16 +155,32 @@ public class GameManager {
                 Bukkit.getOnlinePlayers().forEach(player -> playerManager.moveFromServer(this.plugin.config.getString("lobby-server"), player));
 
                 if (plugin.config.getBoolean("autorestart")) {
-                    Bukkit.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "restart");
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            Bukkit.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "restart");
+                        }
+                    }.runTaskLater(plugin, 120);
                 }
 
+                Bukkit.getOnlinePlayers().forEach(player -> this.scoreBoardManager.removeScoreBoard(player));
                 this.setGameState(GameState.LOBBY);
                 break;
 
         }
     }
 
-    public void cleanup(){}
+    public void cleanup(){
+        String worldName = "world";
+        File playerFilesDir = new File(worldName + "/playerdata");
+        if(playerFilesDir.isDirectory()){
+            String[] playerDats = playerFilesDir.list();
+            for (int i = 0; i < playerDats.length; i++) {
+                File datFile = new File(playerFilesDir, playerDats[i]);
+                datFile.delete();
+            }
+        }
+    }
 
     /**
      * Returns the current lobby wayiting task
@@ -207,4 +239,10 @@ public class GameManager {
         plugin.config.set(path, loc);
         plugin.saveConfig();
     }
+
+    /**
+     * gives back the active scoreboard manager
+     * @return the scorboard manager
+     */
+    public ScoreBoardManager getScoreBoardManager() { return scoreBoardManager; }
 }

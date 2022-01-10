@@ -13,41 +13,23 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class TridentResetTask extends BukkitRunnable {
 
     private GameManager gameManager;
+    private Player thrower;
+    private Entity projectile;
 
     public TridentResetTask (GameManager gameManager, Player thrower, Entity projektile) {
         this.gameManager = gameManager;
+        this.thrower = thrower;
+        this.projectile = projektile;
     }
 
-    private int timeLeft = 30;
+    private int timeLeft = 10;
 
     @Override
     public void run() {
         timeLeft--;
-        if(timeLeft >= 10) {
-            switch (timeLeft) {
-                case 30: Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',this.gameManager.getPlugin().languageDataConfig.getString("game.countdown"))); break;
-                case 25: Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',this.gameManager.getPlugin().languageDataConfig.getString("game.countdown"))); break;
-                case 20: Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',this.gameManager.getPlugin().languageDataConfig.getString("game.countdown"))); break;
-                case 15: Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',this.gameManager.getPlugin().languageDataConfig.getString("game.countdown"))); break;
-            }
-        } else {
-            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',this.gameManager.getPlugin().languageDataConfig.getString("game.countdown")));
-
-            if(Bukkit.getOnlinePlayers().size() < this.gameManager.getPlugin().config.getInt("minplayers")) {
-                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',this.gameManager.getPlugin().languageDataConfig.getString("error.not-enough-players")));
-            }
-
-            if(timeLeft <= 0) {
-                if(Bukkit.getOnlinePlayers().size() < this.gameManager.getPlugin().config.getInt("minplayers")) {
-                    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',this.gameManager.getPlugin().languageDataConfig.getString("error.not-enough-players")));
-                    cancel();
-                    this.gameManager.setGameState(GameState.ABORTING);
-                } else {
-                    cancel();
-                    gameManager.setGameState(GameState.ACTIVE);
-                    return;
-                }
-            }
+        if (timeLeft <= 0) {
+            projectile.remove();
+            thrower.getInventory().addItem(new ItemStack(Material.TRIDENT));
         }
     }
 }

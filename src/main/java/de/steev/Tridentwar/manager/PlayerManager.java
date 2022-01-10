@@ -77,14 +77,23 @@ public class PlayerManager {
     }
 
     /**
-     * Updates or sets a players kills
+     * sets a players kills
      * @param p the player
      */
-    public void addKill(Player p){
+    public void setKills(Player p, int kill){
         if(this.kills.containsKey(p)){
-            this.kills.replace(p, this.kills.get(p)+1);
+            this.kills.replace(p, kill);
         } else {
-            this.kills.put(p, 1);
+            this.kills.put(p, kill);
+        }
+        this.gameManager.getScoreBoardManager().updateScoreBoard(p, this.alive, this.kills.get(p));
+    }
+
+    public void addKill(Player player){
+        if(this.kills.containsKey(player)){
+            setKills(player, getKills(player) + 1);
+        } else {
+            setKills(player, 1);
         }
     }
 
