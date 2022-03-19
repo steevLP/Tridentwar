@@ -1,5 +1,5 @@
 # tridentwar
-Tridentwar is a Minigame inspired by Friends.
+Tridentwar is a Minecraft PVP Minigame based arround Tridents inspired by Friends.
 
 ## History
 The development of this Minigame originated on a Server a Friend of mine was hosting. 
@@ -20,4 +20,4 @@ Now navigate to the menu point `build` and select `build artifact` you will get 
 The finished jar then will be in your `project's root` inside the newly generated `out` folder.
 
 ## Supported version
-I am using the most recent stable Minecraft Paper versions.
+I am using the most recent stable Minecraft Paper versions.  
