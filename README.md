@@ -7,7 +7,9 @@ The entire Idea of developing a game with tridents came up while we played aroun
 after a few weeks i came back to the idea and started designing a Plugin all around Tridents
 
 ## Updates
-The Plugin receives Updates is i make them up. I am trying to say that this Plugin doesnt receive regular Updates because neither would i have enough resources both mind and timewise to make them up in a regular delay nor do i even want to this plugin is opensource so you are always free to just add your own thoughts to the plugin
+The Plugin receives Updates as I make them up.   
+I am trying to say that this Plugin won't receive regular updates because neither would I have enough resources both mind- and timewise to make them up in a regular delay nor do I even want to.  
+The plugin is opensource, so you are always free to just add your Ideas to the plugin.  
 
 ## How to build
 I developed the plugin with IntelliJ so for now I will only explain how to build it from IntelliJ.  
