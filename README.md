@@ -15,9 +15,9 @@ The plugin is opensource, so you are always free to just add your Ideas to the p
 I developed the plugin with IntelliJ so for now I will only explain how to build it from IntelliJ.  
 Make an artifact `file/artifact/new` you want to create an `empty jar`.  
 Once you created the artifact, drag the folder named Tridentwar (it is in the same menu on the right side) into your jar (the section on the left).  
-Save the artifact and return to the editor itself.
-Now navigate to the menu point `build` and select `build artifact` you will get another little menu where IntelliJ askes what exactly to do you want to click `build` there.  
-The finished jar then will be in your `project's root` inside the newly generated `out` folder.
+Save the artifact and return to the editor.
+Now navigate to the menu point `build` and select `build artifact` you will get another little menu where IntelliJ asks what exactly to do you want to click `build` there.  
+The finished jar will be in your `project's root` inside the newly generated `out` folder.
 
 ## Supported version
 I am using the most recent stable Minecraft Paper versions.  
