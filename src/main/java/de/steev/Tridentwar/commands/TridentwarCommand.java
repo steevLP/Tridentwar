@@ -1,7 +1,7 @@
-package de.steev.Tridentwar.commands;
+package de.steev.Tridentwar.Commands;
 
-import de.steev.Tridentwar.manager.GameManager;
-import de.steev.Tridentwar.manager.GameState;
+import de.steev.Tridentwar.Manager.GameManager;
+import de.steev.Tridentwar.Manager.GameState;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;

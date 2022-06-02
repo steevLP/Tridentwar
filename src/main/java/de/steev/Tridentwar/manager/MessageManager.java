@@ -1,12 +1,9 @@
-package de.steev.Tridentwar.manager;
+package de.steev.Tridentwar.Manager;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-
-import java.awt.*;
 
 public class MessageManager {
     private GameManager gameManager;

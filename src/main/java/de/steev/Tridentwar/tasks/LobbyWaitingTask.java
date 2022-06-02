@@ -1,7 +1,7 @@
-package de.steev.Tridentwar.tasks;
+package de.steev.Tridentwar.Tasks;
 
-import de.steev.Tridentwar.manager.GameManager;
-import de.steev.Tridentwar.manager.GameState;
+import de.steev.Tridentwar.Manager.GameManager;
+import de.steev.Tridentwar.Manager.GameState;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -29,6 +29,10 @@ public class LobbyWaitingTask extends BukkitRunnable {
         } else if(timeLeft <= 10) {
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', this.gameManager.getPlugin().languageDataConfig.getString("game.countdown") + timeLeft));
 
+            /**
+             * Checks if the time has run out and messages the Players about game beeing aborted
+             * proceeds then to abort the game and change gamestate accordingly
+             */
             if(timeLeft <= 0) {
                 if(Bukkit.getOnlinePlayers().size() < this.gameManager.getPlugin().config.getInt("minplayers")) {
                     Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',

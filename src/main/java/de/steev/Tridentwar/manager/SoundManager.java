@@ -1,4 +1,4 @@
-package de.steev.Tridentwar.manager;
+package de.steev.Tridentwar.Manager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;

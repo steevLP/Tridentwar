@@ -1,6 +1,6 @@
 package de.steev.Tridentwar.Handlers;
 
-import de.steev.Tridentwar.manager.GameManager;
+import de.steev.Tridentwar.Manager.GameManager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;

@@ -1,8 +1,8 @@
 package de.steev.Tridentwar;
 
-import de.steev.Tridentwar.commands.TridentwarCommand;
-import de.steev.Tridentwar.listeners.*;
-import de.steev.Tridentwar.manager.GameManager;
+import de.steev.Tridentwar.Commands.TridentwarCommand;
+import de.steev.Tridentwar.Listeners.*;
+import de.steev.Tridentwar.Manager.GameManager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;

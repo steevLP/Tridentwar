@@ -1,13 +1,12 @@
-package de.steev.Tridentwar.manager;
+package de.steev.Tridentwar.Manager;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
 public class ScoreBoardManager {
     private GameManager gameManager;
-    private ScoreboardManager manager;
+    private final ScoreboardManager manager;
 
     /**
      * Manages Scoreboards created by the plugin
@@ -22,24 +21,26 @@ public class ScoreBoardManager {
      * @param kills how many kills the player got
      */
     public void createScoreBoard(Player player, int alive, int kills) {
-        Scoreboard scoreboard = manager.getNewScoreboard();
-        Objective objective = scoreboard.registerNewObjective("TridentWar","dummy", ChatColor.translateAlternateColorCodes('&',"&7&l<< &bTridentWar &7&l>>"));
-        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        Score splitter = objective.getScore("=-=-=-=-=-=-=-=-=-=-=");
-        splitter.setScore(6);
-        Score playername = objective.getScore(ChatColor.translateAlternateColorCodes('&',"&ePlayer: " + ChatColor.WHITE + ChatColor.BOLD + player.getDisplayName()));
-        playername.setScore(5);
-        Score empty2 = objective.getScore("");
-        empty2.setScore(4);
-        Score aliveScore = objective.getScore(ChatColor.translateAlternateColorCodes('&',"&eAlive: " + ChatColor.WHITE + ChatColor.BOLD + alive));
+        // Create board instance
+        Scoreboard board = manager.getNewScoreboard();
+
+        // Create Board Objective
+        Objective obj = board.registerNewObjective("Tridentwar", "dummy", "SLPNetwork");
+        obj.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+        // Create Scores
+        Score splitter = obj.getScore("=-=-=-=-=-=-=-=-=-=-=");
+        splitter.setScore(5);
+        Score playerName = obj.getScore("Player: " + player.getDisplayName());
+        playerName.setScore(4);
+        Score aliveScore = obj.getScore("Alive: " + alive);
         aliveScore.setScore(3);
-        Score killScore = objective.getScore(ChatColor.translateAlternateColorCodes('&',"&eKills: " + ChatColor.WHITE + ChatColor.BOLD + kills));
-        killScore.setScore(2);
-        Score empty = objective.getScore("");
-        empty.setScore(1);
-        Score address = objective.getScore("play.slpnetwork.de");
-        address.setScore(0);
-        player.setScoreboard(scoreboard);
+        Score killsScore = obj.getScore("Kills: " + kills);
+        killsScore.setScore(2);
+        Score blankScore = obj.getScore("");
+        blankScore.setScore(1);
+        Score hostScore = obj.getScore("play.slpnetwork.de");
+        hostScore.setScore(0);
     }
 
     /**
@@ -47,10 +48,34 @@ public class ScoreBoardManager {
      * @param player the player
      * @param alive how many players are alive
      * @param kills how many kills the player got
+     * TODO: add time
      */
     public void updateScoreBoard(Player player, int alive, int kills){
-        player.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
-        createScoreBoard(player,alive,kills);
+        // Grab Scoreboard from Player
+        Scoreboard board = player.getScoreboard();
+
+        // Detect if a Scoreboard has been created
+        if(board == null) {
+            // If there is none, create one
+            createScoreBoard(player, alive, kills);
+        } else {
+            // Fetch objective from existing scoreboard
+            Objective obj = board.getObjective(DisplaySlot.SIDEBAR);
+
+            // Replace Scores present on the Screen
+            Score splitter = obj.getScore("=-=-=-=-=-=-=-=-=-=-=");
+            splitter.setScore(5);
+            Score playerName = obj.getScore("Player: " + player.getDisplayName());
+            playerName.setScore(4);
+            Score aliveScore = obj.getScore("Alive: " + alive);
+            aliveScore.setScore(3);
+            Score killsScore = obj.getScore("Kills: " + kills);
+            killsScore.setScore(2);
+            Score blankScore = obj.getScore("");
+            blankScore.setScore(1);
+            Score hostScore = obj.getScore("play.slpnetwork.de");
+            hostScore.setScore(0);
+        }
     }
 
     /**

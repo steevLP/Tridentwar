@@ -1,7 +1,7 @@
-package de.steev.Tridentwar.listeners;
+package de.steev.Tridentwar.Listeners;
 
-import de.steev.Tridentwar.manager.GameManager;
-import de.steev.Tridentwar.manager.GameState;
+import de.steev.Tridentwar.Manager.GameManager;
+import de.steev.Tridentwar.Manager.GameState;
 import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Material;

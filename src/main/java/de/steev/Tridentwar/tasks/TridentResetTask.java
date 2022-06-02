@@ -1,9 +1,6 @@
-package de.steev.Tridentwar.tasks;
+package de.steev.Tridentwar.Tasks;
 
-import de.steev.Tridentwar.manager.GameManager;
-import de.steev.Tridentwar.manager.GameState;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import de.steev.Tridentwar.Manager.GameManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

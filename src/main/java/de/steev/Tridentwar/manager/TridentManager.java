@@ -1,6 +1,6 @@
-package de.steev.Tridentwar.manager;
+package de.steev.Tridentwar.Manager;
 
-import de.steev.Tridentwar.tasks.TridentResetTask;
+import de.steev.Tridentwar.Tasks.TridentResetTask;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;

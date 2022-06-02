@@ -1,9 +1,9 @@
-package de.steev.Tridentwar.listeners;
+package de.steev.Tridentwar.Listeners;
 
 import de.steev.Tridentwar.Tridentwar;
-import de.steev.Tridentwar.manager.GameManager;
-import de.steev.Tridentwar.manager.GameState;
-import de.steev.Tridentwar.tasks.TridentResetTask;
+import de.steev.Tridentwar.Manager.GameManager;
+import de.steev.Tridentwar.Manager.GameState;
+import de.steev.Tridentwar.Tasks.TridentResetTask;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
